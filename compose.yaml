@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db1
+      - db2
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db1:5432/effective_mobile_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      SPRING_DATASOURCE_URL_2: jdbc:postgresql://db2:5432/effective_mobile_db_test
+      SPRING_DATASOURCE_USERNAME_2: postgres
+      SPRING_DATASOURCE_PASSWORD_2: postgres
+    volumes:
+      - ./EffectiveMobileTestTask:/app
+
+  db1:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: effective_mobile_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data1:/var/lib/postgresql/data
+
+  db2:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: effective_mobile_db_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5431:5432"
+    volumes:
+      - db_data2:/var/lib/postgresql/data
+
+volumes:
+  db_data1:  
+  db_data2:  
